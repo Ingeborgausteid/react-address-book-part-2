@@ -46,3 +46,13 @@ ul[class] {
     padding: auto;
 
 }
+
+.create-button{
+    width: 20%;
+    margin-top: 1rem;
+    margin-left: 80%;
+}
+
+.update-button{
+    margin-right: 1rem;
+}

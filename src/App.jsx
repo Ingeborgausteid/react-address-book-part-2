@@ -1,10 +1,11 @@
 import { useState, useEffect, createContext } from "react";
-import { Link, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import MenuSection from "./sections/Menu/MenuComponent";
 import ContactList from "./sections/Contacts/Components/ContactList";
 import ContactView from "./sections/Contacts/Components/ContactView";
 import ContactForm from "./sections/Contacts/Components/ContactForm";
+import UpdateContactForm from "./sections/Contacts/Components/UpdateContactForm";
 
 const ContactContext = createContext();
 
@@ -31,6 +32,7 @@ function App() {
           <Route path="/contacts" element={<ContactList />}></Route>
           <Route path="/contacts/new" element={<ContactForm />}></Route>
           <Route path="/contact/view/:id" element={<ContactView />}></Route>
+          <Route path="/contacts/update/:id" element={<UpdateContactForm />}></Route>
         </Routes>
       </section>
     </ContactContext.Provider>

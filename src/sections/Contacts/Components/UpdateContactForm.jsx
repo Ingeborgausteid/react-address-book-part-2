@@ -1,10 +1,13 @@
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ContactContext } from "../../../App";
 
-function ContactForm(){
+function UpdateContactForm(){
     const context = useContext(ContactContext)
     const navigate = useNavigate()
+    const { id } = useParams();
+    const thisContact = context.contacts.find((x) => x.id == id);
+
     const initialFormData = {
         firstName: "",
         lastName: "",
@@ -12,31 +15,32 @@ function ContactForm(){
         city: ""
     }
 
-    const [formData, setFormData] = useState(initialFormData)
+    const [formData, setFormData] = useState(thisContact)
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const newContact = {
+        const updateContact = {
             firstName: formData.firstName,
             lastName: formData.lastName,
             street: formData.street,
             city: formData.city
         }
 
+        if(thisContact){
+            const response = await fetch(`${context.url}/${id}`, {
+                method: "PUT",
+                headers: { 'Content-Type': 'application/json'},
+                body: JSON.stringify(updateContact)
+            })
 
-        const response = await fetch(context.url, {
-            method: "POST",
-            headers: { 'Content-Type': 'application/json'},
-            body: JSON.stringify(newContact)
-        })
-
-        console.log("Response: ", response)
+            console.log("Update Response: ", response)
+        }
 
         await context.fetchContacts();
 
         setFormData(initialFormData)
 
-        navigate("/");
+        navigate(`/contact/view/${id}`);
 
     }
 
@@ -65,7 +69,7 @@ function ContactForm(){
                     <h3>City:</h3>
                 </label>
                 <input type="text" name="city" onChange={handleChange} value={formData.city}></input>
-                <button className="create-button" type="submit">Create</button>
+                <button className="create-button" type="submit">Update</button>
             </form>
         </section>
         
@@ -73,4 +77,4 @@ function ContactForm(){
     );
 }
 
-export default ContactForm
+export default UpdateContactForm
