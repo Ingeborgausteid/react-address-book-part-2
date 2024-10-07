@@ -1,8 +1,10 @@
 import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ContactContext } from "../../../App";
 
 function ContactForm(){
     const context = useContext(ContactContext)
+    const navigate = useNavigate()
     const initialFormData = {
         firstName: "",
         lastName: "",
@@ -12,7 +14,7 @@ function ContactForm(){
 
     const [formData, setFormData] = useState(initialFormData)
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const newContact = {
             firstName: formData.firstName,
@@ -21,18 +23,26 @@ function ContactForm(){
             city: formData.city
         }
 
-        //context.setContacts([ ...context.contacts, newContact])
 
-        /*const response = await fetch(context.url, {
+        const response = await fetch(context.url, {
             method: "POST",
-            body: JSON.stringify(formData)
-        })*/
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify(newContact)
+        })
+
+        console.log("Response: ", response)
+
+        await context.fetchContacts();
+
+        setFormData(initialFormData)
+
+        navigate("/");
+
     }
 
     const handleChange = (event) => {
         const { name, value } = event.target;
         setFormData({...formData, [name]: value})
-        console.log(formData)
     }
 
     return(
@@ -55,6 +65,7 @@ function ContactForm(){
                     <h3>City:</h3>
                 </label>
                 <input type="text" name="city" onChange={handleChange} value={formData.city}></input>
+                <button type="submit">Create</button>
             </form>
         </section>
         

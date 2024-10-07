@@ -23,7 +23,7 @@ function App() {
   }, [contacts]);
 
   return (
-    <ContactContext.Provider value={{ contacts, setContacts, url }}>
+    <ContactContext.Provider value={{ contacts, setContacts, url, fetchContacts}}>
       <section className="dashboard-layout">
         <MenuSection />
         <Routes>
